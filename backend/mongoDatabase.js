@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const http = require("http");
 const { log } = require("console");
+const cors = require("cors");
 const Schema = mongoose.Schema;
 
 const port = 8080;
@@ -11,6 +12,7 @@ const port = 8080;
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 try {
   mongoose
@@ -39,6 +41,10 @@ const schema = new Schema({
       }
     },
   },
+  dateAndTime: {
+    type: String,
+    required: true,
+  },
 });
 
 const Todo = mongoose.model("Todo", schema);
@@ -53,11 +59,13 @@ const data = {
 };
 
 app.post("/add-todo", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   const place = new Todo(req.body);
   console.log(req.body);
   try {
     await place.save();
-    res.send(place);
+    res.status(200).send(place);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -71,19 +79,23 @@ app.post("/add-todo", async (req, res) => {
 // });
 
 app.get("/get-todo", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   const place = await Todo.find({});
   try {
-    res.send(place);
+    res.status(200).send(place);
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
 app.put("/todo/:id", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   try {
     const place = await Todo.findByIdAndUpdate(req.params.id, req.body);
     const update = await place.save();
-    res.send({
+    res.status(200).send({
       location: update,
     });
   } catch (error) {
@@ -92,6 +104,8 @@ app.put("/todo/:id", async (req, res) => {
 });
 
 app.delete("/delete/:id", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   try {
     const place = await Todo.findByIdAndDelete(req.params.id);
 
