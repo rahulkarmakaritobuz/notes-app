@@ -1,8 +1,22 @@
 body {
   margin: 0;
   padding:0;
-  background-color: #84a3f1;
+background-color: #151515;
 }
+.app-name{
+  color:#d6d6d6;
+  font-size: 2.5rem;
+  text-align: center;
+  padding: 1rem;
+  animation: party 5000ms infinite;
+}
+
+// @keyframes party {
+//   50% {
+//     background-color: hsl(300,72%,35%);
+//   }
+// }
+
 .add-box,
 .icon,
 .bottom-content,
@@ -12,68 +26,184 @@ header,
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.popup-box {
-  // flex-direction: column;
-  top: 50%;
-  left: 50%;
-  z-index: 20;
-  width: 100%;
-  max-width: 15rem;
-  // height: 100%;
-  // width: 100%;
   
-  // top: 0%;
-  // left: 0%;
-  position: fixed;
-  background-color: rgb(3, 3, 3);
+  color:rgba(51, 45, 45, 0.85);
+}
+.settings .menu li{
+  color:rgba(206, 200, 200, 0.85);
 }
 .popup {
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   z-index: 30;
-//   width: 100%;
-//   max-width: 15rem;
-//   // justify-content: center;
+  justify-content: center;
+}
+.popup-box {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 50;
+  width: 100%;
+  max-width: 50rem;
+  position: fixed;
+  /* background-color: rgb(3, 3, 3); */
 }
 .popup-content {
   border-radius: .5rem;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.407);
+  width: 95%;
+  box-shadow: 0 0 5rem 2rem rgb(0 0 0 / 42%);
+}
 
+.popup-box,.popup {
+opacity: 0;
+pointer-events: none;
+transition: all 0.25s ease;
+}
+.popup-box.show,
+.popup-box.show .popup {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+input::placeholder, textarea::placeholder{
+  color:rgb(106, 106, 106);
 }
 
 
+.button-container {
+  display: flex;
+  justify-content: center;
+}
+.button-container button {
+  color: white;
+  background-color: rgba(0, 102, 255, 0.583);
+
+}
+.popup-content header {
+  padding: .9rem 1.5rem;
+  border-bottom: 1px solid #ccc;
+}
+.popup-content header p {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+.popup-content header span {
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.popup-content form {
+  margin: .9rem 1.6rem 2rem;
+}
+.popup-content form .row {
+  margin-bottom: 1.4rem;
+}
+
+.title input {
+  width:-webkit-fill-vailable;
+  padding: .3rem .5rem .3rem .5rem;
+  font-size: 1.2rem;
+  margin: 1rem 0rem 1rem 0rem;
+  border: none;
+  background-color: transparent;
+}
+.description textarea {
+  height: 9rem;
+  font-size: 1.1rem;
+  padding: .3rem .5rem .3rem .5rem;
+  border-radius: 4px;
+  border: none;
+  width: 100%;
+  background-color: transparent;
+}
+textarea{
+  resize: none;
+}
+
+form button {
+  max-width: 100%;
+  width: 20rem;
+  height: 3.1rem;
+  color: #fff;
+  margin-top: 1rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  border-radius: 4px;
+
+}
+
+.popup-background.show{
+  top:0;
+  left:0;
+  right:0;
+  bottom: 0;
+  z-index: 19;
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(15px);
+  pointer-events:all;
+}
+
+.note:nth-child(even) {
+  transform: translateY(8px);
+}
+.note:nth-child(n) {
+  transform: rotate(-5deg);
+}
+
+.wrapper:hover > .note:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+.wrapper:hover > .note:not(:hover) {
+  opacity: 0.5;
+}
+  
+ /*Add box section  */
 .wrapper {
   margin: 3rem;
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, 10rem);
-  // grid-template-rows: repeat(auto-fill);
+  // grid-template-columns: repeat(auto-fill, 15rem);
+  grid-template-columns: repeat(auto-fill, 100%);
+
 }
 .wrapper li {
-  // width: 12rem;
-  height: 10rem;
+  margin:1rem;
+  height: 12rem;
   list-style: none;
   border-radius: 5px;
   padding: 1rem 1.2rem 1.2rem;
-  background: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+
 }
 
-.add-box {
+.wrapper .add-box {
   cursor: pointer;
   flex-direction: column;
   justify-content: center;
+  max-width: 6rem;
+  padding: 0;
+  position: fixed;
+  z-index: 30;
+  bottom: 0;
+  right: 0;
+  margin: 2rem;
 }
 .add-box .icon {
-  height: 5rem;
-  width: 5rem;
+  height: 4rem;
+  width: 4rem;
   color: #88abff;
   font-size: 2rem;
   border-radius: 50%;
   justify-content: center;
+  cursor: pointer;
   border: 2px dashed #88abff;
+  transition: transform 1000ms;
+}
+.icon:hover,.icon:focus-visible {
+  transform: translateY(-1.5rem);
+  transition: transform 500ms;
 }
 .add-box p {
   color: #88abff;
@@ -85,25 +215,28 @@ header,
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  color: #ffffffda;
+  background-color: #202022;
+  transform: scale(1);
+  transition: all 150ms ease-in-out;
 }
 .note .details {
   max-height: 15rem;
   overflow-y: auto;
 }
-.note .details{
-  // width: 0;
-}
+
 
 .note p {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
   font-weight: 500;
 }
-// .note span {
-//   display: block;
-//   color: #575757;
-//   font-size: 16px;
-//   margin-top: 5px;
-// }
+  /* // .note span {
+  //   display: block;
+  //   color: #575757;
+  //   font-size: 16px;
+  //   margin-top: 5px;
+  // } */
 .note .bottom-content {
   padding-top: .8rem;
   border-top: 1px solid #ccc;
@@ -113,7 +246,7 @@ header,
   border-top: 1px solid #ccc;
 }
 .bottom-content span {
-  color: #6d6d6d;
+  color: #bb86fc;
   font-size: .8rem;
 }
 .bottom-content .settings {
@@ -130,12 +263,12 @@ header,
   bottom: 0;
   right: -5px;
   padding: 5px 0;
-  background: #fff;
+  background-color: #202022;
   position: absolute;
   border-radius: 4px;
   transform: scale(0);
   transform-origin: bottom right;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.15);
   transition: transform 0.2s ease;
 }
 .settings.show .menu {
@@ -156,7 +289,23 @@ header,
 }
 .menu li:hover {
   background: #f5f5f5;
+  color:#202022;
 }
 .menu li i {
   padding-right: 8px;
+}
+
+@media (min-width: 600px) {
+  .wrapper {
+    // margin: 15px;
+    // gap: 15px;
+    grid-template-columns: repeat(auto-fill, 15rem);
+  }
+  .wrapper li {
+    margin: 0;
+  }
+  
+  .bottom-content .settings i {
+    font-size: 1.1rem;
+  }
 }

@@ -5,7 +5,14 @@ const demo = () =>
 console.log(demo());
 
 const addBox = document.querySelector(".add-box");
+const popUpBox = document.querySelector(".popup-box");
+const closeBox = document.querySelector(".close");
+const titleTag = document.querySelector("input");
+const descriptionTag = document.querySelector("textarea");
+const addButton = document.querySelector(".add");
+const popupBackground = document.querySelector(".popup-background");
 
+let isUpdate = false;
 const months = [
   "January",
   "February",
@@ -21,6 +28,27 @@ const months = [
   "December",
 ];
 
+const currDate = () => {
+  let currentDate = new Date(),
+    month = months[currentDate.getMonth()],
+    day = currentDate.getDate(),
+    year = currentDate.getFullYear();
+  return day + " " + month + ", " + year;
+};
+
+const formData = () => {
+  let title = titleTag.value;
+  let description = descriptionTag.value;
+
+  console.log("formData:", title, description, currDate());
+  const data = {
+    heading: title,
+    content: description,
+    dateAndTime: currDate(),
+  };
+  return data;
+};
+
 const getData = async (api) => {
   let result = await fetch(api).then((res) => {
     return res.json();
@@ -28,62 +56,23 @@ const getData = async (api) => {
   return result;
 };
 
-addBox.addEventListener("click", (e) => {
-  console.log(e);
-});
-
-// showMenu.addEventListener("click", (e) => {
-//   console.log(e);
-// });
-
-// function showMenu(elem) {
-//   console.log(elem);
-//   elem.parentElement.classList.add("show");
-//   document.addEventListener("click", (e) => {
-//     if (e.target.tagName != "I" || e.target != elem) {
-//       elem.parentElement.classList.remove("show");
-//     }
-//   });
-// }
-
-// const deleteNote = (noteId) => {
-//   let confirmDel = confirm("Are you sure you want to delete this note?");
-//   if (!confirmDel) return;
-//   notes.splice(noteId, 1);
-//   localStorage.setItem("notes", JSON.stringify(notes));
-//   showNotes();
-// };
-
-// const updateNote = (noteId, title, filterDesc) => {
-//   let description = filterDesc.replaceAll("<br/>", "\r\n");
-//   updateId = noteId;
-//   isUpdate = true;
-//   addBox.click();
-//   titleTag.value = title;
-//   descTag.value = description;
-//   popupTitle.innerText = "Update a Note";
-//   addBtn.innerText = "Update Note";
-// };
-
 const showNotes = (notes) => {
   console.log(notes);
   if (!notes) return;
   document.querySelectorAll(".note").forEach((li) => li.remove());
-  notes.forEach((note, id) => {
-    // let filterDesc = note.description.replaceAll("\n", "<br/>");
-    // let filterDesc = notes[id].content;
-    let liTag = `<li class="note">
+  notes.data.forEach((note, id) => {
+    let liTag = `<li class="note" >
                         <div class="details">
                             <p>${note.heading}</p>
                             <span>${note.content}</span>
                         </div>
                         <div class="bottom-content">
-                            <span>${note.date}</span>
+                            <span>${note.dateAndTime}</span>
                             <div class="settings">
-                                <i onclick="show()" class="menu-button fa fa-ellipsis-h"></i>
+                                <i onclick="showMenu(this)" class="menu-button fa fa-ellipsis-h"></i>
                                 <ul class="menu">
-                                    <li onclick="updateNote(${note._id}, '${note.heading}', '${note.content}')"><i class="fa-solid fa-pen"></i></i>Edit</li>
-                                    <li onclick="deleteNote(${note._id})"><i class="fa fa-trash" aria-hidden="true"></i>Delete</li>
+                                    <li onclick="update('${note._id}', '${note.heading}', '${note.content}')" class="update"><i class="fa-solid fa-pen"></i>Edit</li>
+                                    <li onclick="deleteNote('${note._id}')" class="delete"><i class="fa fa-trash" aria-hidden="true"></i>Delete</li>
                                 </ul>
                             </div>
                         </div>
@@ -92,14 +81,55 @@ const showNotes = (notes) => {
   });
 };
 
-getData("http://localhost:8080/get-todo").then((res) => {
-  let title = res[0].heading;
-  let content = res[0].content;
+getData("http://localhost:8080/get-note").then((res) => {
+  console.log("get data running...");
   showNotes(res);
 });
 
-function show() {
+const addData = async (newNoteData) => {
+  const addNoteUrl = "http://localhost:8080/add-note";
+
+  const response = await fetch(addNoteUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newNoteData),
+  });
+};
+
+const showMenu = (elem) => {
   console.log("hello");
-}
-// const showMenuButton = document.querySelector(".add-box .menu-button");
+  console.log(elem);
+  elem.parentElement.classList.add("show");
+  document.addEventListener("click", (e) => {
+    if (e.target.tagName != "I" || e.target != elem) {
+      elem.parentElement.classList.remove("show");
+    }
+  });
+};
+
+addBox.addEventListener("click", (e) => {
+  console.log(e);
+  popUpBox.classList.add("show");
+  popupBackground.classList.add("show");
+  // document.querySelector("body").style.overflow = "hidden";
+  titleTag.focus();
+});
+closeBox.addEventListener("click", () => {
+  isUpdate = false;
+  titleTag.value = descriptionTag.value = "";
+  popUpBox.classList.remove("show");
+  popupBackground.classList.remove("show");
+  // document.querySelector("body").style.overflow = "auto";
+});
+addButton.addEventListener("click", (e) => {
+  const data = formData();
+  console.log(data);
+  addData(data);
+  popUpBox.classList.remove("show");
+  popupBackground.classList.remove("show");
+});
+
+// const showMenuButton = document.querySelector(".add-box .fa-ellipsis-h");
 // console.log(showMenuButton);
