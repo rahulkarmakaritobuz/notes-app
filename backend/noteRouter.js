@@ -9,7 +9,11 @@ app.use(cors());
 
 noteRouter.post("/add-note", async (req, res, next) => {
   try {
-    const noteData = await noteModel.Note(req.body);
+    const noteData = await noteModel.Note({
+      heading: req.body.heading,
+      content: req.body.content,
+      dateAndTime: new Date().toLocaleString(),
+    });
     const response = await noteData.save();
     res.status(200).send({
       data: response,
@@ -62,10 +66,11 @@ noteRouter.get("/get-note", async (req, res) => {
 noteRouter.put("/note/:id", async (req, res) => {
   console.log(req.body);
   try {
-    const noteData = await noteModel.Note.findByIdAndUpdate(
-      req.params.id,
-      req.body
-    );
+    const noteData = await noteModel.Note.findByIdAndUpdate(req.params.id, {
+      heading: req.body.heading,
+      content: req.body.content,
+      dateAndTime: new Date().toLocaleString(),
+    });
     const update = await noteData.save();
     res.status(200).send({
       data: update,

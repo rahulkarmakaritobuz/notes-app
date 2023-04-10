@@ -26,21 +26,12 @@ const months = [
   "December",
 ];
 
-const currDate = () => {
-  let currentDate = new Date(),
-    month = months[currentDate.getMonth()],
-    day = currentDate.getDate(),
-    year = currentDate.getFullYear();
-  return day + " " + month + ", " + year;
-};
-
 const formData = () => {
   let title = titleTag.value;
   let description = descriptionTag.value;
   const data = {
     heading: title,
     content: description,
-    dateAndTime: currDate(),
   };
   return data;
 };
