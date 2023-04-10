@@ -1,18 +1,16 @@
-const demo = () =>
-  "Webpack Boilerplate v5.16.0 - SASS/PostCSS, ES6/7, browser sync, source code listing and more.";
-
-// eslint-disable-next-line no-console
-console.log(demo());
-
 const addBox = document.querySelector(".add-box");
-const popUpBox = document.querySelector(".popup-box");
 const closeBox = document.querySelector(".close");
+const addButton = document.querySelector(".add");
+const popUpBox = document.querySelector(".popup-box");
 const titleTag = document.querySelector("input");
 const descriptionTag = document.querySelector("textarea");
-const addButton = document.querySelector(".add");
 const popupBackground = document.querySelector(".popup-background");
+const warningContainer = document.querySelector(".delete-warning");
+const warning = document.querySelectorAll(".confirm-button button");
+const formButton = document.querySelector(".button-container button");
 
-let isUpdate = false;
+let updateId = "";
+let buttonText = "";
 const months = [
   "January",
   "February",
@@ -39,8 +37,6 @@ const currDate = () => {
 const formData = () => {
   let title = titleTag.value;
   let description = descriptionTag.value;
-
-  console.log("formData:", title, description, currDate());
   const data = {
     heading: title,
     content: description,
@@ -57,7 +53,6 @@ const getData = async (api) => {
 };
 
 const showNotes = (notes) => {
-  console.log(notes);
   if (!notes) return;
   document.querySelectorAll(".note").forEach((li) => li.remove());
   notes.data.forEach((note, id) => {
@@ -71,7 +66,7 @@ const showNotes = (notes) => {
                             <div class="settings">
                                 <i onclick="showMenu(this)" class="menu-button fa fa-ellipsis-h"></i>
                                 <ul class="menu">
-                                    <li onclick="update('${note._id}', '${note.heading}', '${note.content}')" class="update"><i class="fa-solid fa-pen"></i>Edit</li>
+                                    <li onclick="updateNote('${note._id}', '${note.heading}', '${note.content}')" class="update"><i class="fa-solid fa-pen"></i>Edit</li>
                                     <li onclick="deleteNote('${note._id}')" class="delete"><i class="fa fa-trash" aria-hidden="true"></i>Delete</li>
                                 </ul>
                             </div>
@@ -81,14 +76,15 @@ const showNotes = (notes) => {
   });
 };
 
-getData("http://localhost:8080/get-note").then((res) => {
-  console.log("get data running...");
-  showNotes(res);
-});
+const show = () => {
+  getData("http://localhost:8080/get-note").then((res) => {
+    showNotes(res);
+  });
+};
+show();
 
 const addData = async (newNoteData) => {
   const addNoteUrl = "http://localhost:8080/add-note";
-
   const response = await fetch(addNoteUrl, {
     method: "POST",
     headers: {
@@ -96,11 +92,10 @@ const addData = async (newNoteData) => {
     },
     body: JSON.stringify(newNoteData),
   });
+  show();
 };
 
 const showMenu = (elem) => {
-  console.log("hello");
-  console.log(elem);
   elem.parentElement.classList.add("show");
   document.addEventListener("click", (e) => {
     if (e.target.tagName != "I" || e.target != elem) {
@@ -109,27 +104,72 @@ const showMenu = (elem) => {
   });
 };
 
-addBox.addEventListener("click", (e) => {
-  console.log(e);
+const updateNote = (noteId, title, desc) => {
+  buttonText = "Edit";
+  formButton.textContent = buttonText;
   popUpBox.classList.add("show");
   popupBackground.classList.add("show");
-  // document.querySelector("body").style.overflow = "hidden";
+  titleTag.focus();
+  titleTag.value = title;
+  descriptionTag.value = desc;
+  updateId = noteId;
+};
+
+const updateData = async (newNoteData) => {
+  let api = "http://localhost:8080/note/" + updateId;
+  const response = await fetch(api, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    body: JSON.stringify(newNoteData),
+  });
+  show();
+};
+
+const deleteData = async (api) => {
+  await fetch(api, {
+    method: "DELETE",
+    headers: {
+      "Content-type": "application/json",
+    },
+  });
+  show();
+};
+
+const deleteNote = (noteId) => {
+  let api = "http://localhost:8080/delete/" + noteId;
+  warningContainer.classList.add("show");
+  popupBackground.classList.add("show");
+  warning.forEach((val) => {
+    val.addEventListener("click", (e) => {
+      if (val.value === "true") deleteData(api);
+      warningContainer.classList.remove("show");
+      popupBackground.classList.remove("show");
+    });
+  });
+};
+
+addBox.addEventListener("click", () => {
+  buttonText = "Add Note";
+  formButton.textContent = buttonText;
+  popUpBox.classList.add("show");
+  popupBackground.classList.add("show");
   titleTag.focus();
 });
 closeBox.addEventListener("click", () => {
-  isUpdate = false;
   titleTag.value = descriptionTag.value = "";
   popUpBox.classList.remove("show");
   popupBackground.classList.remove("show");
-  // document.querySelector("body").style.overflow = "auto";
 });
 addButton.addEventListener("click", (e) => {
   const data = formData();
-  console.log(data);
-  addData(data);
+  buttonText === "Add Note" ? addData(data) : updateData(data);
   popUpBox.classList.remove("show");
   popupBackground.classList.remove("show");
 });
 
-// const showMenuButton = document.querySelector(".add-box .fa-ellipsis-h");
-// console.log(showMenuButton);
+window.showMenu = showMenu;
+window.updateNote = updateNote;
+window.deleteNote = deleteNote;
+window.deleteData = deleteData;

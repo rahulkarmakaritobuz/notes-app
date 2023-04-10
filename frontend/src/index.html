@@ -32,77 +32,29 @@
             </div>
 
             <div class="button-container">
-              <button class="add">Add Note</button>
+              <button class="add"></button>
             </div>
           </form>
         </div>
       </div>
     </div>
     <div class="popup-background"></div>
-    <!-- <div>
-      <textarea></textarea>
-      <div>
-        <input type="color" id="head" name="head" value="#e66465" />
-        <label for="head"></label>
-      </div>
-    </div> -->
     <div class="wrapper">
       <li class="add-box">
         <div class="icon"><i class="fa-solid fa-plus"></i></div>
         <p>Add new note</p>
       </li>
     </div>
+    <div class="delete-warning">
+      <p class="heading">Warning!</p>
+      <p class="warning-message">Are you sure you want to delete this note?</p>
+      <div class="confirm-button">
+        <button class="no" value="false">No</button>
+        <button class="yes" value="true">Yes</button>
+      </div>
+    </div>
+    <div class="popup-background"></div>
 
-    <script>
-      const popUpBox = document.querySelector(".popup-box");
-      const titleTag = document.querySelector("input");
-      const descriptionTag = document.querySelector("textarea");
-      const popupBackground = document.querySelector(".popup-background");
-
-      const showMenu = (elem) => {
-        console.log("hello");
-        console.log(elem);
-        elem.parentElement.classList.add("show");
-        document.addEventListener("click", (e) => {
-          if (e.target.tagName != "I" || e.target != elem) {
-            elem.parentElement.classList.remove("show");
-          }
-        });
-      };
-
-      const deleteData = async (api) => {
-        await fetch(api, {
-          method: "DELETE",
-          headers: {
-            "Content-type": "application/json",
-          },
-        });
-        console.log("Resource deleted...");
-      };
-
-      const deleteNote = (noteId) => {
-        console.log("delete Note");
-        let api = "http://localhost:8080/delete/" + noteId;
-        console.log(api);
-        let confirmDel = confirm("Are you sure you want to delete this note?");
-        if (!confirmDel) return;
-        deleteData(api);
-      };
-
-      const update = (noteId, title, desc) => {
-        console.log("update Note");
-        isUpdate = true;
-        let api = "http://localhost:8080/note/" + noteId;
-        popUpBox.classList.add("show");
-        popupBackground.classList.add("show");
-        titleTag.focus();
-        titleTag.value = title;
-        descriptionTag.value = desc;
-        setTimeout(() => {
-          deleteData("http://localhost:8080/delete/" + noteId);
-        }, 3000);
-      };
-    </script>
     <!-- <script src="./js/main.js"></script> -->
   </body>
 </html>

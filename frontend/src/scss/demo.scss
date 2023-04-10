@@ -1,21 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
 body {
   margin: 0;
   padding:0;
-background-color: #151515;
+  background-color: #151515;
+  font-family: 'Open Sans', sans-serif;
 }
 .app-name{
   color:#d6d6d6;
   font-size: 2.5rem;
   text-align: center;
   padding: 1rem;
-  animation: party 5000ms infinite;
 }
 
-// @keyframes party {
-//   50% {
-//     background-color: hsl(300,72%,35%);
-//   }
-// }
 
 .add-box,
 .icon,
@@ -39,11 +36,11 @@ header,
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  z-index: 50;
+  z-index: 0;
   width: 100%;
   max-width: 50rem;
   position: fixed;
-  /* background-color: rgb(3, 3, 3); */
+
 }
 .popup-content {
   border-radius: .5rem;
@@ -58,9 +55,12 @@ pointer-events: none;
 transition: all 0.25s ease;
 }
 .popup-box.show,
-.popup-box.show .popup {
+.popup-box.show .popup, .delete-warning.show {
   opacity: 1;
   pointer-events: auto;
+}
+.popup-box.show, .delete-warning.show {
+  z-index: 100;
 }
 
 input::placeholder, textarea::placeholder{
@@ -98,7 +98,7 @@ input::placeholder, textarea::placeholder{
 }
 
 .title input {
-  width:-webkit-fill-vailable;
+  width: 100%;
   padding: .3rem .5rem .3rem .5rem;
   font-size: 1.2rem;
   margin: 1rem 0rem 1rem 0rem;
@@ -136,9 +136,9 @@ form button {
   left:0;
   right:0;
   bottom: 0;
-  z-index: 19;
+  z-index: 31;
   position: fixed;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(15px);
   pointer-events:all;
 }
@@ -159,15 +159,56 @@ form button {
 .wrapper:hover > .note:not(:hover) {
   opacity: 0.5;
 }
-  
+ 
+
+.delete-warning {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  position: fixed;
+  background: #202022;
+  width: 15rem;
+  height: 12rem;
+  padding: 1rem;
+  color: rgb(255, 255, 255);
+  border: 2px solid white;
+  text-align: center;
+  border-radius: 5px;
+  z-index: 0;
+  opacity: 0;
+}
+.delete-warning .heading {
+  color: red;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.warning-message {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+.confirm-button {
+  display: flex;
+  justify-content: space-around;
+}
+.confirm-button button {
+  font-size: 1.2rem;
+  padding: .4rem 1rem .4rem 1rem;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 2rem;
+  color: white;
+  cursor: pointer;
+}
+.confirm-button button:hover {
+  background-color: rgb(168, 32, 32);
+}
+
  /*Add box section  */
 .wrapper {
   margin: 3rem;
   display: grid;
   gap: 1.5rem;
-  // grid-template-columns: repeat(auto-fill, 15rem);
   grid-template-columns: repeat(auto-fill, 100%);
-
 }
 .wrapper li {
   margin:1rem;
@@ -182,7 +223,7 @@ form button {
   cursor: pointer;
   flex-direction: column;
   justify-content: center;
-  max-width: 6rem;
+  max-width: 7rem;
   padding: 0;
   position: fixed;
   z-index: 30;
@@ -231,12 +272,6 @@ form button {
   margin-bottom: 1rem;
   font-weight: 500;
 }
-  /* // .note span {
-  //   display: block;
-  //   color: #575757;
-  //   font-size: 16px;
-  //   margin-top: 5px;
-  // } */
 .note .bottom-content {
   padding-top: .8rem;
   border-top: 1px solid #ccc;
@@ -297,8 +332,6 @@ form button {
 
 @media (min-width: 600px) {
   .wrapper {
-    // margin: 15px;
-    // gap: 15px;
     grid-template-columns: repeat(auto-fill, 15rem);
   }
   .wrapper li {

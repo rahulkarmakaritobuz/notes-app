@@ -6,6 +6,7 @@
   "main": "mongoDatabase.js",
   "dependencies": {
     "cors": "^2.8.5",
+    "env": "^0.0.2",
     "express": "^4.18.2",
     "mongoose": "^7.0.3",
     "nodemon": "^2.0.22"
@@ -13,7 +14,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
-
   },
   "keywords": [],
   "author": "",
