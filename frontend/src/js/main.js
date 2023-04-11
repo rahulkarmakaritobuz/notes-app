@@ -178,6 +178,7 @@ addButton.addEventListener("click", (e) => {
   buttonText === "Add Note" ? addData(data) : updateData(data);
   popUpBox.classList.remove("show");
   popupBackground.classList.remove("show");
+  titleTag.value = descriptionTag.value = "";
 });
 
 window.showMenu = showMenu;

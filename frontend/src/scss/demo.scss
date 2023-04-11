@@ -17,8 +17,11 @@ body {
   display: none;
   top: 3rem;
   right: 0;
-  width: 11rem;
-  padding: 1rem;
+  width: 12rem;
+  padding: 1rem .5rem 1rem 1.2rem;
+  border-top-left-radius: 5rem;
+  border-bottom-left-radius: 5rem;
+  font-size: 1.1rem;
   background: #bb86fc;
   position: fixed;
   animation:1s ease-in-out popup;
