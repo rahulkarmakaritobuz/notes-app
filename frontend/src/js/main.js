@@ -8,6 +8,7 @@ const popupBackground = document.querySelector(".popup-background");
 const warningContainer = document.querySelector(".delete-warning");
 const warning = document.querySelectorAll(".confirm-button button");
 const formButton = document.querySelector(".button-container button");
+const toastMessage = document.querySelector(".toast-message");
 
 let updateId = "";
 let buttonText = "";
@@ -25,6 +26,22 @@ const months = [
   "November",
   "December",
 ];
+
+const getUrl = (endPoints) => {
+  return "http://localhost:8080/" + endPoints;
+};
+
+const toast = (message) => {
+  toastMessage.style.display = "block";
+  toastMessage.textContent = message;
+  setTimeout(() => {
+    toastMessage.classList.add("toast-popup");
+  }, 3000);
+  setTimeout(() => {
+    toastMessage.style.display = "none";
+    toastMessage.classList.remove("toast-popup");
+  }, 3500);
+};
 
 const formData = () => {
   let title = titleTag.value;
@@ -68,14 +85,14 @@ const showNotes = (notes) => {
 };
 
 const show = () => {
-  getData("http://localhost:8080/get-note").then((res) => {
+  getData(getUrl("get-note")).then((res) => {
     showNotes(res);
   });
 };
 show();
 
 const addData = async (newNoteData) => {
-  const addNoteUrl = "http://localhost:8080/add-note";
+  const addNoteUrl = getUrl("add-note");
   const response = await fetch(addNoteUrl, {
     method: "POST",
     headers: {
@@ -84,6 +101,7 @@ const addData = async (newNoteData) => {
     body: JSON.stringify(newNoteData),
   });
   show();
+  toast("New note created!");
 };
 
 const showMenu = (elem) => {
@@ -107,7 +125,7 @@ const updateNote = (noteId, title, desc) => {
 };
 
 const updateData = async (newNoteData) => {
-  let api = "http://localhost:8080/note/" + updateId;
+  let api = getUrl(`note/${updateId}`);
   const response = await fetch(api, {
     method: "PUT",
     headers: {
@@ -116,6 +134,7 @@ const updateData = async (newNoteData) => {
     body: JSON.stringify(newNoteData),
   });
   show();
+  toast("Note updated!");
 };
 
 const deleteData = async (api) => {
@@ -126,10 +145,11 @@ const deleteData = async (api) => {
     },
   });
   show();
+  toast("Note deleted!");
 };
 
 const deleteNote = (noteId) => {
-  let api = "http://localhost:8080/delete/" + noteId;
+  let api = getUrl(`delete/${noteId}`);
   warningContainer.classList.add("show");
   popupBackground.classList.add("show");
   warning.forEach((val) => {

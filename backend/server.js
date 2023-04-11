@@ -9,13 +9,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-db.on("error", (err) => {
-  console.log(err);
-});
-db.on("conected", () => {
-  console.log("Database connected...");
-});
-
 app.use(noteRouter);
 
 app.use((req, res, next) => {

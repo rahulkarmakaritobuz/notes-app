@@ -13,6 +13,35 @@ body {
   padding: 1rem;
 }
 
+.toast-message {
+  display: none;
+  top: 3rem;
+  right: 0;
+  width: 11rem;
+  padding: 1rem;
+  background: #bb86fc;
+  position: fixed;
+  animation:1s ease-in-out popup;
+}
+@keyframes popup {
+  0%{
+    transform: translateX(100%);
+  }
+  100%{
+    transform: translateX(0);
+  }
+}
+.toast-popup {
+  animation:  .5s ease-out popupBack;
+}
+@keyframes popupBack {
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
 
 .add-box,
 .icon,

@@ -21,15 +21,11 @@ noteRouter.post("/add-note", async (req, res, next) => {
       success: true,
     });
   } catch (error) {
-    res.status(500).send({
-      data: null,
-      message: "Failed to create note",
-      success: false,
-    });
+    next(error);
   }
 });
 
-noteRouter.get("/get-note/:id", async (req, res) => {
+noteRouter.get("/get-note/:id", async (req, res, next) => {
   const noteData = await noteModel.Note.find({ _id: req.params.id });
   try {
     res.status(200).send({
@@ -38,15 +34,11 @@ noteRouter.get("/get-note/:id", async (req, res) => {
       success: true,
     });
   } catch (error) {
-    res.status(500).send({
-      data: error,
-      message: "No Note found!",
-      success: false,
-    });
+    next(error);
   }
 });
 
-noteRouter.get("/get-note", async (req, res) => {
+noteRouter.get("/get-note", async (req, res, next) => {
   const noteData = await noteModel.Note.find({});
   try {
     res.status(200).send({
@@ -55,15 +47,11 @@ noteRouter.get("/get-note", async (req, res) => {
       success: true,
     });
   } catch (error) {
-    res.status(500).send({
-      data: error,
-      message: "No note found",
-      success: false,
-    });
+    next(error);
   }
 });
 
-noteRouter.put("/note/:id", async (req, res) => {
+noteRouter.put("/note/:id", async (req, res, next) => {
   console.log(req.body);
   try {
     const noteData = await noteModel.Note.findByIdAndUpdate(req.params.id, {
@@ -78,15 +66,11 @@ noteRouter.put("/note/:id", async (req, res) => {
       success: true,
     });
   } catch (error) {
-    res.status(500).send({
-      data: error,
-      message: "No note found!",
-      success: false,
-    });
+    next(error);
   }
 });
 
-noteRouter.delete("/delete/:id", async (req, res) => {
+noteRouter.delete("/delete/:id", async (req, res, next) => {
   try {
     const noteData = await noteModel.Note.findByIdAndDelete(req.params.id);
 
@@ -97,11 +81,7 @@ noteRouter.delete("/delete/:id", async (req, res) => {
       success: true,
     });
   } catch (error) {
-    res.status(500).send({
-      data: error,
-      message: "No note found!",
-      success: false,
-    });
+    next(error);
   }
 });
 
