@@ -337,6 +337,7 @@ form button {
   transform-origin: bottom right;
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.15);
   transition: transform 0.2s ease;
+  position: fixed;
 }
 .settings.show .menu {
   transform: scale(1);
