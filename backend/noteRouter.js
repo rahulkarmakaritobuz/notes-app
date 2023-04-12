@@ -52,7 +52,6 @@ noteRouter.get("/get-note", async (req, res, next) => {
 });
 
 noteRouter.put("/note/:id", async (req, res, next) => {
-  console.log(req.body);
   try {
     const noteData = await noteModel.Note.findByIdAndUpdate(req.params.id, {
       heading: req.body.heading,
