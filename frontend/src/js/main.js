@@ -169,6 +169,7 @@ const viewAndEdit = (...noteData) => {
 };
 
 addBox.addEventListener("click", () => {
+  popUpBoxHeading.textContent = "Add new note";
   buttonText = "Add Note";
   formButton.textContent = buttonText;
   popUpBox.classList.add("show");
