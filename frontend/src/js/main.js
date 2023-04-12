@@ -2,6 +2,7 @@ const addBox = document.querySelector(".add-box");
 const closeBox = document.querySelector(".close");
 const addButton = document.querySelector(".add");
 const popUpBox = document.querySelector(".popup-box");
+const popUpBoxHeading = document.querySelector(".popup-box-heading");
 const titleTag = document.querySelector("input");
 const descriptionTag = document.querySelector("textarea");
 const popupBackground = document.querySelector(".popup-background");
@@ -9,6 +10,7 @@ const warningContainer = document.querySelector(".delete-warning");
 const warning = document.querySelectorAll(".confirm-button button");
 const formButton = document.querySelector(".button-container button");
 const toastMessage = document.querySelector(".toast-message");
+const noteDetails = document.querySelector(".note .details");
 
 let updateId = "";
 let buttonText = "";
@@ -65,7 +67,7 @@ const showNotes = (notes) => {
   document.querySelectorAll(".note").forEach((li) => li.remove());
   notes.data.forEach((note, id) => {
     let liTag = `<li class="note" >
-                        <div class="details">
+                        <div onclick="viewAndEdit('${note._id}', '${note.heading}', '${note.content}')" class="details">
                             <p>${note.heading}</p>
                             <span>${note.content}</span>
                         </div>
@@ -116,6 +118,7 @@ const showMenu = (elem) => {
 const updateNote = (noteId, title, desc) => {
   buttonText = "Edit";
   formButton.textContent = buttonText;
+  popUpBoxHeading.textContent = "Edit note";
   popUpBox.classList.add("show");
   popupBackground.classList.add("show");
   titleTag.focus();
@@ -161,6 +164,10 @@ const deleteNote = (noteId) => {
   });
 };
 
+const viewAndEdit = (...noteData) => {
+  updateNote(noteData[0], noteData[1], noteData[2]);
+};
+
 addBox.addEventListener("click", () => {
   buttonText = "Add Note";
   formButton.textContent = buttonText;
@@ -185,3 +192,4 @@ window.showMenu = showMenu;
 window.updateNote = updateNote;
 window.deleteNote = deleteNote;
 window.deleteData = deleteData;
+window.viewAndEdit = viewAndEdit;
