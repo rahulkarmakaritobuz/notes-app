@@ -7,27 +7,12 @@ const titleTag = document.querySelector("input");
 const descriptionTag = document.querySelector("textarea");
 const popupBackground = document.querySelector(".popup-background");
 const warningContainer = document.querySelector(".delete-warning");
-const warning = document.querySelectorAll(".confirm-button button");
 const formButton = document.querySelector(".button-container button");
 const toastMessage = document.querySelector(".toast-message");
 const noteDetails = document.querySelector(".note .details");
 
 let updateId = "";
 let buttonText = "";
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
 const getUrl = (endPoints) => {
   return "http://localhost:8080/" + endPoints;
@@ -155,12 +140,14 @@ const deleteNote = (noteId) => {
   let api = getUrl(`delete/${noteId}`);
   warningContainer.classList.add("show");
   popupBackground.classList.add("show");
-  warning.forEach((val) => {
-    val.addEventListener("click", (e) => {
-      if (val.value === "true") deleteData(api);
-      warningContainer.classList.remove("show");
-      popupBackground.classList.remove("show");
-    });
+  document.querySelector(".yes").addEventListener("click", () => {
+    deleteData(api);
+    warningContainer.classList.remove("show");
+    popupBackground.classList.remove("show");
+  });
+  document.querySelector(".no").addEventListener("click", () => {
+    warningContainer.classList.remove("show");
+    popupBackground.classList.remove("show");
   });
 };
 
