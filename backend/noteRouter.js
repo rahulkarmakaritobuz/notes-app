@@ -15,11 +15,15 @@ noteRouter.post("/add-note", async (req, res, next) => {
       dateAndTime: new Date().toLocaleString(),
     });
     const response = await noteData.save();
-    res.status(200).send({
-      data: response,
-      message: "Note created",
-      success: true,
-    });
+    if (response._id) {
+      res.status(200).send({
+        data: response,
+        message: "Note created",
+        success: true,
+      });
+    } else {
+      res.status(500).send(new Error("Note not created"));
+    }
   } catch (error) {
     next(error);
   }
@@ -59,11 +63,15 @@ noteRouter.put("/note/:id", async (req, res, next) => {
       dateAndTime: new Date().toLocaleString(),
     });
     const update = await noteData.save();
-    res.status(200).send({
-      data: update,
-      message: "Note updated",
-      success: true,
-    });
+    if (update._id) {
+      res.status(200).send({
+        data: update,
+        message: "Note updated",
+        success: true,
+      });
+    } else {
+      res.status(500).send(new Error("Note not updated"));
+    }
   } catch (error) {
     next(error);
   }
