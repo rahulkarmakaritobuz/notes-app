@@ -170,10 +170,15 @@ closeBox.addEventListener("click", () => {
 });
 addButton.addEventListener("click", (e) => {
   const data = formData();
-  buttonText === "Add Note" ? addData(data) : updateData(data);
-  popUpBox.classList.remove("show");
-  popupBackground.classList.remove("show");
-  titleTag.value = descriptionTag.value = "";
+  console.log(data);
+  if (data.heading.trim() !== "" && data.content.trim() !== "") {
+    buttonText === "Add Note" ? addData(data) : updateData(data);
+    popUpBox.classList.remove("show");
+    popupBackground.classList.remove("show");
+    titleTag.value = descriptionTag.value = "";
+  } else {
+    toast("Invalid heading or content");
+  }
 });
 
 window.showMenu = showMenu;
