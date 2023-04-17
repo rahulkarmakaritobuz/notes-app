@@ -86,9 +86,11 @@ const addData = async (newNoteData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newNoteData),
+  }).then((res) => {
+    return res.json();
   });
   show();
-  toast("New note created!");
+  toast(response.message);
 };
 
 const showMenu = (elem) => {
@@ -120,20 +122,24 @@ const updateData = async (newNoteData) => {
       "Content-Type": "application/json;charset=UTF-8",
     },
     body: JSON.stringify(newNoteData),
+  }).then((res) => {
+    return res.json();
   });
   show();
-  toast("Note updated!");
+  toast(response.message);
 };
 
 const deleteData = async (api) => {
-  await fetch(api, {
+  const response = await fetch(api, {
     method: "DELETE",
     headers: {
       "Content-type": "application/json",
     },
+  }).then((res) => {
+    return res.json();
   });
   show();
-  toast("Note deleted!");
+  toast(response.message);
 };
 
 const deleteNote = (noteId) => {
@@ -170,7 +176,6 @@ closeBox.addEventListener("click", () => {
 });
 addButton.addEventListener("click", (e) => {
   const data = formData();
-  console.log(data);
   if (data.heading.trim() !== "" && data.content.trim() !== "") {
     buttonText === "Add Note" ? addData(data) : updateData(data);
     popUpBox.classList.remove("show");
