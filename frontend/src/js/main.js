@@ -78,19 +78,25 @@ const show = () => {
 };
 show();
 
-const addData = async (newNoteData) => {
-  const addNoteUrl = getUrl("add-note");
-  const response = await fetch(addNoteUrl, {
-    method: "POST",
+const backendOperation = async (endPoint, method, data) => {
+  console.log(data);
+  const addNoteUrl = getUrl(endPoint);
+  return await fetch(addNoteUrl, {
+    method: method,
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(newNoteData),
+    body: JSON.stringify(data),
   }).then((res) => {
     return res.json();
   });
-  show();
-  toast(response.message);
+};
+
+const addData = async (newNoteData) => {
+  backendOperation("add-note", "POST", newNoteData).then((res) => {
+    show();
+    toast(res.message);
+  });
 };
 
 const showMenu = (elem) => {
@@ -115,39 +121,25 @@ const updateNote = (noteId, title, desc) => {
 };
 
 const updateData = async (newNoteData) => {
-  let api = getUrl(`note/${updateId}`);
-  const response = await fetch(api, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json;charset=UTF-8",
-    },
-    body: JSON.stringify(newNoteData),
-  }).then((res) => {
-    return res.json();
+  backendOperation(`note/${updateId}`, "PUT", newNoteData).then((res) => {
+    show();
+    toast(res.message);
   });
-  show();
-  toast(response.message);
 };
 
-const deleteData = async (api) => {
-  const response = await fetch(api, {
-    method: "DELETE",
-    headers: {
-      "Content-type": "application/json",
-    },
-  }).then((res) => {
-    return res.json();
+const deleteData = async (endPoint) => {
+  backendOperation(endPoint, "DELETE").then((res) => {
+    show();
+    toast(res.message);
   });
-  show();
-  toast(response.message);
 };
 
 const deleteNote = (noteId) => {
-  let api = getUrl(`delete/${noteId}`);
+  // let api = getUrl(`delete/${noteId}`);
   warningContainer.classList.add("show");
   popupBackground.classList.add("show");
   document.querySelector(".yes").addEventListener("click", () => {
-    deleteData(api);
+    deleteData(`delete/${noteId}`);
     warningContainer.classList.remove("show");
     popupBackground.classList.remove("show");
   });
